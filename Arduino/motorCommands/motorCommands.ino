@@ -15,8 +15,8 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61);
 
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *myMotor1 = AFMS.getMotor(1);
-Adafruit_DCMotor *myMotor2 = AFMS.getMotor(2);
+Adafruit_DCMotor *myMotorLeft = AFMS.getMotor(1);
+Adafruit_DCMotor *myMotorRight = AFMS.getMotor(2);
 // You can also make another motor on port M2
 //Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
@@ -32,51 +32,47 @@ void setup() {
   Serial.println("Motor Shield found.");
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
-  myMotor1->setSpeed(150);
-  myMotor2->setSpeed(150);
-  myMotor1->run(FORWARD);
-  myMotor2->run(FORWARD);
+  myMotorLeft->setSpeed(150);
+  myMotorRight->setSpeed(150);
+  myMotorLeft->run(FORWARD);
+  myMotorRight->run(FORWARD);
   // turn on motor
-  myMotor1->run(RELEASE);
-  myMotor2->run(RELEASE);
+  myMotorLeft->run(RELEASE);
+  myMotorRight->run(RELEASE);
 }
 
 void loop() {
   uint8_t i;
 
-  Serial.print("tick");
-
-  myMotor1->run(FORWARD);
-  myMotor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    myMotor1->setSpeed(i);
-    myMotor2->setSpeed(i);
-    delay(10);
-  }
-  for (i=255; i!=0; i--) {
-    myMotor1->setSpeed(i);
-    myMotor2->setSpeed(i);
-    delay(10);
-  }
-
-  Serial.print("tock");
-
-  myMotor1->run(BACKWARD);
-  myMotor2->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    myMotor1->setSpeed(i);
-    myMotor2->setSpeed(i);
-    delay(10);
-  }
-  for (i=255; i!=0; i--) {
-    myMotor1->setSpeed(i);
-    myMotor2->setSpeed(i);
-    delay(10);
-  }
-
+  Serial.print("tick");  
   Serial.print("tech");
-  myMotor1->run(RELEASE);
-  myMotor2->run(RELEASE);
-  delay(1000);
+   delay(1000);
 }
 
+
+void driveForward(int speed) {
+  myMotorLeft->run(FORWARD);
+  myMotorRight->run(FORWARD);
+  myMotorLeft->setSpeed(speed);
+  myMotorRight->setSpeed(speed);
+
+}
+
+void turnLeft(int ang, int radius, int speed) {
+  myMotorLeft->run(FORWARD);
+  myMotorRight->run(FORWARD);
+  myMotorLeft->setSpeed(speed);
+  myMotorRight->setSpeed(3*speed);
+}
+
+void turnRight(int ang, int radius, int speed) {
+  myMotorLeft->run(FORWARD);
+  myMotorRight->run(FORWARD);
+  myMotorLeft->setSpeed(3*speed);
+  myMotorRight->setSpeed(speed);
+}
+
+void stop(){
+  myMotorLeft->run(RELEASE);
+  myMotorRight->run(RELEASE);
+}
