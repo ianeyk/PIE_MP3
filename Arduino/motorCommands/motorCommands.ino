@@ -40,9 +40,9 @@ void readSensors()
     sensorValues[sensor] = analogRead(sensorPins[sensor]);
   }
 
-  Serial.print("Senosor 1");
+  Serial.print("Senosor 1: ");
   Serial.print(sensorValues[0]);
-  Serial.print("   Senosor 2");
+  Serial.print("   Senosor 2: ");
   Serial.println(sensorValues[1]);
 }
 
@@ -78,15 +78,19 @@ void stop()
 
 void loop()
 {
-  readSensors();
+  driveForward(180);
+  // readSensors();
 
-  if (sensorValues[0] < THRESH && sensorValues[1] < THRESH) {
-    driveForward(SPEED);
-  }
-  if (sensorValues[0] > THRESH && sensorValues[1] < THRESH) {
-    turnRight(0, 0, SPEED);
-  }
-  if (sensorValues[0] < THRESH && sensorValues[1] > THRESH) {
-    turnLeft(0, 0, SPEED);
-  }
+  // if (sensorValues[0] < THRESH && sensorValues[1] < THRESH) {
+  //   driveForward(SPEED);
+  // }
+  // else if (sensorValues[0] > THRESH && sensorValues[1] < THRESH) {
+  //   turnRight(0, 0, SPEED);
+  // }
+  // else if (sensorValues[0] < THRESH && sensorValues[1] > THRESH) {
+  //   turnLeft(0, 0, SPEED);
+  // }
+  // else {
+  //   driveForward(SPEED);
+  // }
 }
