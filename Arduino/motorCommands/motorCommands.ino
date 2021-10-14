@@ -48,6 +48,7 @@ void readSensors()
 
 void driveForward(int speed)
 {
+  Serial.println("Driving Forward");
   myMotorLeft->run(FORWARD);
   myMotorRight->run(FORWARD);
   myMotorLeft->setSpeed(speed);
@@ -56,6 +57,7 @@ void driveForward(int speed)
 
 void turnLeft(int ang, int radius, int speed)
 {
+  Serial.println("Turning Left");
   myMotorLeft->run(FORWARD);
   myMotorRight->run(FORWARD);
   myMotorLeft->setSpeed(speed);
@@ -64,6 +66,7 @@ void turnLeft(int ang, int radius, int speed)
 
 void turnRight(int ang, int radius, int speed)
 {
+  Serial.println("Turning Right");
   myMotorLeft->run(FORWARD);
   myMotorRight->run(FORWARD);
   myMotorLeft->setSpeed(3 * speed);
@@ -72,6 +75,7 @@ void turnRight(int ang, int radius, int speed)
 
 void stop()
 {
+  Serial.println("Stopping");
   myMotorLeft->run(RELEASE);
   myMotorRight->run(RELEASE);
 }
