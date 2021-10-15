@@ -55,7 +55,7 @@ void driveForward(int speed)
   myMotorRight->setSpeed(speed);
 }
 
-void turnLeft(int ang, int radius, int speed)
+void turnLeft(int speed)
 {
   Serial.println("Turning Left");
   myMotorLeft->run(FORWARD);
@@ -64,7 +64,7 @@ void turnLeft(int ang, int radius, int speed)
   myMotorRight->setSpeed(3 * speed);
 }
 
-void turnRight(int ang, int radius, int speed)
+void turnRight(int speed)
 {
   Serial.println("Turning Right");
   myMotorLeft->run(FORWARD);
@@ -80,21 +80,28 @@ void stop()
   myMotorRight->run(RELEASE);
 }
 
+bool leftSensorOnTape() {
+  return sensorValues[0] < THRESH
+}
+
+bool rightSensorOnTape() {
+  return sensorValues[1] < THRESH
+}
+
 void loop()
 {
   driveForward(180);
-  // readSensors();
+  readSensors();
 
-  // if (sensorValues[0] < THRESH && sensorValues[1] < THRESH) {
-  //   driveForward(SPEED);
-  // }
-  // else if (sensorValues[0] > THRESH && sensorValues[1] < THRESH) {
-  //   turnRight(0, 0, SPEED);
-  // }
-  // else if (sensorValues[0] < THRESH && sensorValues[1] > THRESH) {
-  //   turnLeft(0, 0, SPEED);
-  // }
-  // else {
-  //   driveForward(SPEED);
-  // }
+  if (leftSensorOnTape() && !rightSensorOnTape()) {
+    driveForward();
+  }
+
+  else if (leftSensorOnTape() && rightSensorOnTape()) {
+    turnRight();
+  }
+
+  else if (!leftSensorOnTape() && !rightSensorOnTape()) {
+    turnLeft();
+  }
 }
