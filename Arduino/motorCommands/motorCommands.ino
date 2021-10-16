@@ -11,7 +11,7 @@ const int numSensors = 2;
 const int sensorPins[numSensors] = {A1, A2};
 int sensorValues[numSensors];
 
-const int THRESH = 400;
+const int THRESH = 360;
 const int SPEED = 127;
 
 void setup()
@@ -81,27 +81,60 @@ void stop()
 }
 
 bool leftSensorOnTape() {
-  return sensorValues[0] < THRESH
+  return sensorValues[0] < THRESH;
 }
 
 bool rightSensorOnTape() {
-  return sensorValues[1] < THRESH
+  return sensorValues[1] < THRESH;
+}
+
+void printForward() {
+    Serial.println("                                  /\\");
+    Serial.println("                                 /||\\");
+    Serial.println("                                //||\\\\");
+    Serial.println("                               ///||\\\\\\");
+    Serial.println("                                  ||");
+    Serial.println("                                  ||");
+    Serial.println("                                  ||");
+}
+
+void printLeft() {
+    Serial.println("                                 ///////");
+    Serial.println("                                <<<<<<<------");
+    Serial.println("                                 \\\\\\\\\\\\\\");
+}
+
+void printRight() {
+    Serial.println("                                               \\\\\\\\\\\\\\");
+    Serial.println("                                          ------>>>>>>>");
+    Serial.println("                                               ///////");
 }
 
 void loop()
 {
-  driveForward(180);
+  // driveForward(30);
   readSensors();
 
   if (leftSensorOnTape() && !rightSensorOnTape()) {
-    driveForward();
+    // driveForward(30);
+    printForward();
+
   }
 
   else if (leftSensorOnTape() && rightSensorOnTape()) {
-    turnRight();
+    // turnRight(30);
+    printRight();
+
   }
 
   else if (!leftSensorOnTape() && !rightSensorOnTape()) {
-    turnLeft();
+    // turnLeft(30);
+    printLeft();
   }
+
+  else {
+    // turnRight(30);
+    printRight();
+  }
+  delay(300);
 }
