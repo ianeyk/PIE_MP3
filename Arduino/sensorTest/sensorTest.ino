@@ -2,7 +2,7 @@ int sensorPin = A0; // select the input pin for the potentiometer
 int ledPin = 13;    // select the pin for the LED
 
 const int numSensors = 2;
-const int sensorPins[numSensors] = {A1, A2};
+const int sensorPins[numSensors] = {A2, A3};
 String sensorNames[numSensors] = {"Left", "Right"}; // variable to store the value coming from the sensor
 int sensorValues[numSensors]; // variable to store the value coming from the sensor
 

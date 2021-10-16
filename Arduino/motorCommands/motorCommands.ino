@@ -4,11 +4,11 @@
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
 // Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *myMotorLeft = AFMS.getMotor(1);
-Adafruit_DCMotor *myMotorRight = AFMS.getMotor(2);
+Adafruit_DCMotor *myMotorLeft = AFMS.getMotor(2);
+Adafruit_DCMotor *myMotorRight = AFMS.getMotor(1);
 
 const int numSensors = 2;
-const int sensorPins[numSensors] = {A1, A2};
+const int sensorPins[numSensors] = {A2, A3};
 int sensorValues[numSensors];
 
 const int THRESH = 382;
@@ -49,8 +49,8 @@ void readSensors()
 void driveForward(int speed)
 {
   Serial.println("Driving Forward");
-  myMotorLeft->run(FORWARD);
-  myMotorRight->run(FORWARD);
+  myMotorLeft->run(BACKWARD);
+  myMotorRight->run(BACKWARD);
   myMotorLeft->setSpeed(speed);
   myMotorRight->setSpeed(speed);
 }
@@ -58,8 +58,8 @@ void driveForward(int speed)
 void turnLeft(int speed)
 {
   Serial.println("Turning Left");
-  myMotorLeft->run(FORWARD);
-  myMotorRight->run(FORWARD);
+  myMotorLeft->run(BACKWARD);
+  myMotorRight->run(BACKWARD);
   myMotorLeft->setSpeed(speed);
   myMotorRight->setSpeed(3 * speed);
 }
@@ -67,8 +67,8 @@ void turnLeft(int speed)
 void turnRight(int speed)
 {
   Serial.println("Turning Right");
-  myMotorLeft->run(FORWARD);
-  myMotorRight->run(FORWARD);
+  myMotorLeft->run(BACKWARD);
+  myMotorRight->run(BACKWARD);
   myMotorLeft->setSpeed(3 * speed);
   myMotorRight->setSpeed(speed);
 }
@@ -112,29 +112,29 @@ void printRight() {
 
 void loop()
 {
-  // driveForward(30);
+  driveForward(30);
   readSensors();
 
-  if (leftSensorOnTape() && !rightSensorOnTape()) {
-    // driveForward(30);
+  if (leftSensorOnTape() && 1 - rightSensorOnTape()) {
+    driveForward(30);
     printForward();
 
   }
 
   else if (leftSensorOnTape() && rightSensorOnTape()) {
-    // turnRight(30);
+    turnRight(30);
     printRight();
 
   }
 
-  else if (!leftSensorOnTape() && !rightSensorOnTape()) {
-    // turnLeft(30);
+  else if (1 - leftSensorOnTape() && 1 - rightSensorOnTape()) {
+    turnLeft(30);
     printLeft();
   }
 
   else {
-    // turnRight(30);
+    turnRight(30);
     printRight();
   }
-  delay(300);
+  // delay(300);
 }
