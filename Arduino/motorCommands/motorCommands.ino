@@ -11,7 +11,7 @@ const int numSensors = 2;
 const int sensorPins[numSensors] = {A1, A2};
 int sensorValues[numSensors];
 
-const int THRESH = 360;
+const int THRESH = 382;
 const int SPEED = 127;
 
 void setup()
