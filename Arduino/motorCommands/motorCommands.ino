@@ -12,8 +12,12 @@ const int sensorPins[numSensors] = {A2, A3};
 int sensorValues[numSensors];
 
 const int THRESH = 382;
+int SPEED = 35;
 
-String readString, SPEEDc, DELAYc, ratio, RATIOc;
+String readString;
+
+int SPEEDc, DELAYc;
+float ratio, RATIOc;
 
 void setup()
 {
@@ -60,18 +64,17 @@ void turnLeft(int speed)
 {
   Serial.println("Turning Left");
   myMotorLeft->setSpeed(speed);
-  myMotorRight->setSpeed(RATIOc.toInt() * speed);
+  myMotorRight->setSpeed(RATIOc * speed);
   myMotorRight->run(BACKWARD);
 }
 
 void turnRight(int speed)
 {
   Serial.println("Turning Right");
-  myMotorLeft->setSpeed(RATIOc.toInt() * speed);
+  myMotorLeft->setSpeed(RATIOc * speed);
   myMotorRight->setSpeed(speed);
   myMotorRight->run(BACKWARD);
   myMotorLeft->run(BACKWARD);
-  myMotorRight->run(FORWARD);
 }
 
 void stop()
@@ -122,13 +125,13 @@ void loop()
   }
   if(readString.length() > 0) {
     Serial.println(readString);
-    SPEEDc = readString.substring(0,3);
-    DELAYc = readString.substring(3,7);
-    ratio = readString.substring(7,10);
-    RATIOc = ratio.toFloat()/100;
-    Serial.println("Speed =" + SPEEDc);
-    Serial.println("Delay = " + DELAYc);
-    Serial.println("Ratio = " + RATIOc);
+    SPEEDc = (readString.substring(0,3)).toInt();
+    DELAYc = (readString.substring(3,7)).toInt();
+    ratio = (readString.substring(7,10)).toFloat();
+    RATIOc = ratio / 100;
+    Serial.println("Speed = " + String(SPEEDc));
+    Serial.println("Delay = " + String(DELAYc));
+    Serial.println("Ratio = " + String(RATIOc));
     readString = "";
   }
 
@@ -174,16 +177,17 @@ void loop()
 
   if (leftSensorOnTape() || rightSensorOnTape()) {
     printLeft();
-    turnLeft(SPEED);
+    turnLeft(SPEEDc);
   }
 
   else {
     printRight();
-    turnRight(SPEED);
+    turnRight(SPEEDc);
   }
 
+  delay(DELAYc);
   stop();
-  delay(DELAYc.toInt());
+  delay(DELAYc);
 
   // delay(1000;
 
