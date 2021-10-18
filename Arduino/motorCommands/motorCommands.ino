@@ -12,7 +12,8 @@ const int sensorPins[numSensors] = {A2, A3};
 int sensorValues[numSensors];
 
 const int THRESH = 382;
-const int SPEED = 35;
+
+String readString, SPEEDc, DELAYc, ratio, RATIOc;
 
 void setup()
 {
@@ -58,8 +59,8 @@ void driveForward(int speed)
 void turnLeft(int speed)
 {
   Serial.println("Turning Left");
-  myMotorLeft->setSpeed(-speed);
-  myMotorRight->setSpeed(1.5 * speed);
+  myMotorLeft->setSpeed(speed);
+  myMotorRight->setSpeed(RATIOc.toInt() * speed);
   myMotorRight->run(BACKWARD);
   myMotorLeft->run(BACKWARD);
 }
@@ -67,8 +68,8 @@ void turnLeft(int speed)
 void turnRight(int speed)
 {
   Serial.println("Turning Right");
-  myMotorLeft->setSpeed(1.5 * speed);
-  myMotorRight->setSpeed(-speed);
+  myMotorLeft->setSpeed(RATIOc.toInt() * speed);
+  myMotorRight->setSpeed(speed);
   myMotorRight->run(BACKWARD);
   myMotorLeft->run(BACKWARD);
 }
@@ -112,29 +113,52 @@ void printRight() {
 
 void loop()
 {
-  // driveForward(SPEED);
+  while(Serial.available()){
+    delay(10);
+    if(Serial.available() > 0) {
+      char c = Serial.read();
+      readString += c;
+    }
+  }
+  if(readString.length() > 0) {
+    Serial.println(readString);
+    SPEEDc = readString.substring(0,3);
+    DELAYc = readString.substring(3,7);
+    ratio = readString.substring(7,10);
+    RATIOc = ratio.toFloat()/100;
+    Serial.println("Speed =" + SPEEDc);
+    Serial.println("Delay = " + DELAYc);
+    Serial.println("Ratio = " + RATIOc);
+    readString = "";
+  }
+
+
+  // driveForward(SPEEDc);
   readSensors();
 
   if (leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    driveForward(SPEED);
-    printForward();
+    driveForward(SPEEDc.toInt());
+   printForward();
+   Serial.println(SPEEDc);
 
   }
 
   else if (leftSensorOnTape() && rightSensorOnTape()) {
-    turnRight(SPEED);
-    printRight();
-
+    turnRight(SPEEDc.toInt());
+   printRight();
+  Serial.println(SPEEDc);
   }
 
   else if (1 - leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    turnLeft(SPEED);
+    turnLeft(SPEEDc.toInt());
     printLeft();
+    Serial.println(SPEEDc);
   }
 
   else if (1 - leftSensorOnTape() && rightSensorOnTape()){
-    turnRight(SPEED);
+    turnRight(SPEEDc.toInt());
     printRight();
+    Serial.println(SPEEDc);
   }
 
   else {
@@ -142,7 +166,8 @@ void loop()
   }
 
   stop();
-  delay(500);
+  delay(DELAYc.toInt());
 
   // delay(1000;
+
 }
