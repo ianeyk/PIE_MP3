@@ -12,7 +12,7 @@ const int sensorPins[numSensors] = {A2, A3};
 int sensorValues[numSensors];
 
 const int THRESH = 382;
-const int SPEED = 127;
+const int SPEED = 35;
 
 void setup()
 {
@@ -49,28 +49,28 @@ void readSensors()
 void driveForward(int speed)
 {
   Serial.println("Driving Forward");
-  myMotorLeft->run(BACKWARD);
-  myMotorRight->run(BACKWARD);
   myMotorLeft->setSpeed(speed);
   myMotorRight->setSpeed(speed);
+  myMotorRight->run(BACKWARD);
+  myMotorLeft->run(BACKWARD);
 }
 
 void turnLeft(int speed)
 {
   Serial.println("Turning Left");
-  myMotorLeft->run(BACKWARD);
+  myMotorLeft->setSpeed(-speed);
+  myMotorRight->setSpeed(1.5 * speed);
   myMotorRight->run(BACKWARD);
-  myMotorLeft->setSpeed(speed);
-  myMotorRight->setSpeed(3 * speed);
+  myMotorLeft->run(BACKWARD);
 }
 
 void turnRight(int speed)
 {
   Serial.println("Turning Right");
-  myMotorLeft->run(BACKWARD);
+  myMotorLeft->setSpeed(1.5 * speed);
+  myMotorRight->setSpeed(-speed);
   myMotorRight->run(BACKWARD);
-  myMotorLeft->setSpeed(3 * speed);
-  myMotorRight->setSpeed(speed);
+  myMotorLeft->run(BACKWARD);
 }
 
 void stop()
@@ -112,29 +112,37 @@ void printRight() {
 
 void loop()
 {
-  driveForward(30);
+  // driveForward(SPEED);
   readSensors();
 
   if (leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    driveForward(30);
+    driveForward(SPEED);
     printForward();
 
   }
 
   else if (leftSensorOnTape() && rightSensorOnTape()) {
-    turnRight(30);
+    turnRight(SPEED);
     printRight();
 
   }
 
   else if (1 - leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    turnLeft(30);
+    turnLeft(SPEED);
     printLeft();
   }
 
-  else {
-    turnRight(30);
+  else if (1 - leftSensorOnTape() && rightSensorOnTape()){
+    turnRight(SPEED);
     printRight();
   }
-  // delay(300);
+
+  else {
+    Serial.print("error!");
+  }
+
+  stop();
+  delay(500);
+
+  // delay(1000;
 }
