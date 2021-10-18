@@ -62,7 +62,6 @@ void turnLeft(int speed)
   myMotorLeft->setSpeed(speed);
   myMotorRight->setSpeed(RATIOc.toInt() * speed);
   myMotorRight->run(BACKWARD);
-  myMotorLeft->run(BACKWARD);
 }
 
 void turnRight(int speed)
@@ -72,6 +71,7 @@ void turnRight(int speed)
   myMotorRight->setSpeed(speed);
   myMotorRight->run(BACKWARD);
   myMotorLeft->run(BACKWARD);
+  myMotorRight->run(FORWARD);
 }
 
 void stop()
@@ -82,11 +82,11 @@ void stop()
 }
 
 bool leftSensorOnTape() {
-  return sensorValues[0] < THRESH;
+  return 1 - (sensorValues[0] < THRESH);
 }
 
 bool rightSensorOnTape() {
-  return sensorValues[1] < THRESH;
+  return 1 - (sensorValues[1] < THRESH);
 }
 
 void printForward() {
@@ -136,33 +136,50 @@ void loop()
   // driveForward(SPEEDc);
   readSensors();
 
-  if (leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    driveForward(SPEEDc.toInt());
-   printForward();
-   Serial.println(SPEEDc);
+  // if (leftSensorOnTape() && 1 - rightSensorOnTape()) {
+  //   driveForward(SPEED);
+  //   printForward();
+  //   Serial.println(111);
 
-  }
+  // }
 
-  else if (leftSensorOnTape() && rightSensorOnTape()) {
-    turnRight(SPEEDc.toInt());
-   printRight();
-  Serial.println(SPEEDc);
-  }
+  // else if (1 - leftSensorOnTape() && rightSensorOnTape()){
+  //   turnRight(SPEED);
+  //   printRight();
+  //   Serial.println(222);
+  // }
 
-  else if (1 - leftSensorOnTape() && 1 - rightSensorOnTape()) {
-    turnLeft(SPEEDc.toInt());
+  // else if (1 - leftSensorOnTape() && 1 - rightSensorOnTape()) {
+  //   turnLeft(SPEED);
+  //   printLeft();
+  //   Serial.println(333);
+  // }
+
+  // else if (leftSensorOnTape() && rightSensorOnTape()) {
+  //   turnRight(SPEED);
+  //   printRight();
+  //   Serial.println(444);
+
+  // }
+
+  // else {
+  //   Serial.print("error!");
+  // }
+
+  Serial.println("leftSensorOnTape: "); Serial.println(leftSensorOnTape());
+  Serial.println("rightSensorOnTape: "); Serial.println(rightSensorOnTape());
+
+  // Serial.println("leftSensorOnTape: ");Serial.println(sensorValues[0] < THRESH);
+  // Serial.println("rightSensorOnTape: "); Serial.println(sensorValues[1] < THRESH);
+
+  if (leftSensorOnTape() || rightSensorOnTape()) {
     printLeft();
-    Serial.println(SPEEDc);
-  }
-
-  else if (1 - leftSensorOnTape() && rightSensorOnTape()){
-    turnRight(SPEEDc.toInt());
-    printRight();
-    Serial.println(SPEEDc);
+    turnLeft(SPEED);
   }
 
   else {
-    Serial.print("error!");
+    printRight();
+    turnRight(SPEED);
   }
 
   stop();
