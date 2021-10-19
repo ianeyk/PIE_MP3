@@ -12,12 +12,14 @@ const int sensorPins[numSensors] = {A2, A3};
 int sensorValues[numSensors];
 
 const int THRESH = 382;
-int SPEED = 35;
+int SPEED = 15;
 
 String readString;
 
-int SPEEDc, DELAYc;
-float ratio, RATIOc;
+int SPEEDc = 15;
+int DELAYc = 100;
+float ratio;
+float RATIOc = 4;
 
 void setup()
 {
@@ -66,6 +68,7 @@ void turnLeft(int speed)
   myMotorLeft->setSpeed(speed);
   myMotorRight->setSpeed(RATIOc * speed);
   myMotorRight->run(BACKWARD);
+  myMotorLeft->run(BACKWARD);
 }
 
 void turnRight(int speed)
@@ -75,6 +78,24 @@ void turnRight(int speed)
   myMotorRight->setSpeed(speed);
   myMotorRight->run(BACKWARD);
   myMotorLeft->run(BACKWARD);
+}
+
+void pivotLeft(int speed)
+{
+  Serial.println("Turning Left");
+  myMotorLeft->setSpeed(speed);
+  myMotorRight->setSpeed(RATIOc * speed);
+  myMotorRight->run(BACKWARD);
+  myMotorLeft->run(FORWARD);
+}
+
+void pivotRight(int speed)
+{
+  Serial.println("Turning Right");
+  myMotorLeft->setSpeed(RATIOc * speed);
+  myMotorRight->setSpeed(speed);
+  myMotorRight->run(BACKWARD);
+  myMotorLeft->run(FORWARD);
 }
 
 void stop()
@@ -187,7 +208,7 @@ void loop()
 
   delay(DELAYc);
   stop();
-  delay(DELAYc);
+  // delay(DELAYc);
 
   // delay(1000;
 
