@@ -14,12 +14,12 @@ const int numMotors = 2;
 int motorValues[numSensors];
 
 const int THRESH = 382;
-int SPEED = 15;
+int SPEED = 12;
 
 String readString;
 
 int SPEEDc = 15;
-int DELAYc = 100;
+int DELAYc = 1;
 float ratio;
 float RATIOc = 4;
 
@@ -140,6 +140,7 @@ bool rightSensorOnTape() {
 }
 
 void printColumns() {
+  Serial.print("Time"); Serial.print(", ");
   Serial.print("Left Sensor"); Serial.print(", ");
   Serial.print("Right Sensor"); Serial.print(", ");
   Serial.print("Left Motor"); Serial.print(", ");
@@ -147,10 +148,11 @@ void printColumns() {
 }
 
 void printData() {
+  Serial.print(millis()); Serial.print(", ");
   Serial.print(sensorValues[0]); Serial.print(", ");
   Serial.print(sensorValues[1]); Serial.print(", ");
   Serial.print(motorValues[0]); Serial.print(", ");
-  Serial.print(motorValues[1]); Serial.print(", ");
+  Serial.print(motorValues[1]); Serial.println("");
 }
 
 void loop()
