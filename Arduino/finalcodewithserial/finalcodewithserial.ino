@@ -82,48 +82,6 @@ void turnRight(int speed)// turn the robot right
   motorValues[1] = rightSpeed; // set second value in motorValues array to the right wheel's speed
 }
 
-// OLD STUFF
-
-void pivotLeft(int speed)
-{
-  float leftSpeed = speed;
-  float rightSpeed = RATIOc * speed;
-
-  // Serial.println("Turning Left");
-  myMotorLeft->setSpeed(leftSpeed);
-  myMotorRight->setSpeed(rightSpeed);
-  myMotorRight->run(BACKWARD);
-  myMotorLeft->run(FORWARD);
-
-  motorValues[0] = -1 * leftSpeed;
-  motorValues[1] = rightSpeed;
-}
-
-void pivotRight(int speed)
-{
-  float leftSpeed = RATIOc * speed;
-  float rightSpeed = speed;
-  // Serial.println("Turning Right");
-  myMotorLeft->setSpeed(leftSpeed);
-  myMotorRight->setSpeed(rightSpeed);
-  myMotorRight->run(FORWARD);
-  myMotorLeft->run(BACKWARD);
-
-  motorValues[0] = leftSpeed;
-  motorValues[1] = -1 * rightSpeed;
-}
-
-void stop() // stop the robot
-{
-  myMotorLeft->run(RELEASE); // turn the left motor off
-  myMotorRight->run(RELEASE); // turn the right motor off
-
-  motorValues[0] = 0;
-  motorValues[1] = 0;
-}
-
-// OLD STUFF ABOVE
-
 bool leftSensorOnTape() { // test if left sensor is on the tape or not
   return 1 - (sensorValues[0] < THRESH); // if the left sensor value is smaller than the threshold, then it is on the tape
 }
